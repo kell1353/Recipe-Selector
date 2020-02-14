@@ -121,14 +121,14 @@ def createDict():
 ##    worksheet['A1'] = str(recipes)
     workbook.save('RecipeList.xlsx')
     workbook.close()
-createDict()
+#createDict()
 
 
 
 def generateHTML(Type, recipe):
     'Retrieve the workbook and worksheet for the dictionary objects.'
     getExcelDoc()
-    recipes = ast.literal_eval(worksheet['A1'].value)
+    #recipes = ast.literal_eval(worksheet['A1'].value)
 
     'Split the lists of ingredients and instructions into single lines'
     ingredientsList = ''
@@ -195,27 +195,28 @@ def generateHTML(Type, recipe):
 def generateRandRecipes(Type, n):
     'Retrieve the workbook and worksheet for the dictionary objects.'
     getExcelDoc()
-    recipes = ast.literal_eval(worksheet['A1'].value)
+    #recipes = ast.literal_eval(worksheet['A1'].value)
 
     'Retrive recipe url list from excel doc'
     urls = getUrls(Type)
 
-    #randRec = random.sample(range(0, len(urls)), n)
-    randRec = random.sample(range(0, 3), n)
+    randRec = random.sample(range(0, len(urls)), n)
+    #randRec = random.sample(range(2, 5), n)
     columns, columnDiv, ingredientsList = '', '', ''
     for i in range(0, len(randRec)):
         recipe = createRecipe(urls[randRec[i]])
 
-        for j in recipes[Type][recipe]['Ingredients']:
+        ingredients = ast.literal_eval(worksheet["K"+ str(randRec[i])].value)
+        for j in ingredients:
             ingredientsList += "<p>" + str(j) + "</p>"
         
         columns +=  """.column""" + str(i + 1) + """ {border-style: groove; float: left; width: """ + str(100/len(randRec)) + """%; padding: 10px; height: 60%;}"""
         #style ="position: absolute; top: 585px; width: 24%;"
         columnDiv += """<div class=""" + 'column' + str(i + 1) + """>
-                                                   <h2>""" + recipes[Type][recipe]['Title'] + """</h2>
-                                                   <img src =""" + recipes[Type][recipe]['Image'] + """ border = "2"; >
+                                                   <h2>""" + worksheet['D'+ str(randRec[i])].value + """</h2>
+                                                   <img src =""" + worksheet['E'+ str(randRec[i])].value + """ border = "2"; >
                                                    <h3> Summary </h3>
-                                                   <p>""" + recipes[Type][recipe]['Summary'] + """</p>
+                                                   <p>""" + worksheet['F'+ str(randRec[i])].value + """</p>
                                            </div>"""
 
     htmlFile = open('Generated Recipes.html','w')
@@ -258,4 +259,4 @@ def generateRandRecipes(Type, n):
     htmlFile.write(html)
     htmlFile.close()
     webbrowser.open_new_tab('Generated Recipes.html')
-#generateRandRecipes('Lunch_Dinner', 2)
+generateRandRecipes('Lunch_Dinner', 2)
