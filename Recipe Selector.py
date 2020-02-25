@@ -260,3 +260,4 @@ def generateRandRecipes(Type, n):
     htmlFile.close()
     webbrowser.open_new_tab('Generated Recipes.html')
 generateRandRecipes('Lunch_Dinner', 2)
+ 
